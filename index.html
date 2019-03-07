@@ -41,20 +41,18 @@
                     });
                     canvas.add(shape);
                 } else if (objType == 'circle') {
+                    console.log("HERE");
                     shape = new fabric.Circle({
-                        left: origX,
-                        top: origY,
-                        originX: 'left',
-                        originY: 'top',
-                        width: pointer.x-origX,
-                        height: pointer.y-origY,
-                        angle: 0,
-                        fill: 'rgba(255,0,0,0.5)',
-                        transparentCorners: false
+                        raduis: 200,
+                        // width: pointer.x - origX,
+                        // height: pointer.y - origY,
+                        // originX: 'center',
+                        // originY: 'center',
+                        fill: 'rgba(0,0,255,0.5)'
                     });
                     canvas.add(shape);
-                } else {
-                    shape = new fabric.Circle({
+                } else if (objType == 'triangle'){
+                    shape = new fabric.Rect({
                         left: origX,
                         top: origY,
                         originX: 'left',
