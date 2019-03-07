@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="utf-8"/>
+    <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="fabric.js"></script>
+    </head>
+
+    <body>
+        <button onclick="selectObject('square')" >Square</button>
+        <button onclick="selectObject('circle')">Circle</button>
+        <button onclick="selectObject('triangle')">Triangle</button>
+        <canvas id="c" width="400" height="600"></canvas>
+        <script type="text/javascript">
+            var canvas = new fabric.Canvas('c');
+
+            var objType = "square";
+
+            var shape, isDown, origX, origY;
+
+            canvas.on('mouse:down', function(o){
+                isDown = true;
+                var pointer = canvas.getPointer(o.e);
+                origX = pointer.x;
+                origY = pointer.y;
+                var pointer = canvas.getPointer(o.e);
+
+
+                if(objType == 'square') {
+                    
+                    shape = new fabric.Rect({
+                        left: origX,
+                        top: origY,
+                        originX: 'left',
+                        originY: 'top',
+                        width: pointer.x-origX,
+                        height: pointer.y-origY,
+                        angle: 0,
+                        fill: 'rgba(255,0,0,0.5)',
+                        transparentCorners: false
+                    });
+                    canvas.add(shape);
+                } else if (objType == 'circle') {
+                    shape = new fabric.Circle({
+                        left: origX,
+                        top: origY,
+                        originX: 'left',
+                        originY: 'top',
+                        width: pointer.x-origX,
+                        height: pointer.y-origY,
+                        angle: 0,
+                        fill: 'rgba(255,0,0,0.5)',
+                        transparentCorners: false
+                    });
+                    canvas.add(shape);
+                } else {
+                    shape = new fabric.Circle({
+                        left: origX,
+                        top: origY,
+                        originX: 'left',
+                        originY: 'top',
+                        width: pointer.x-origX,
+                        height: pointer.y-origY,
+                        angle: 0,
+                        fill: 'rgba(255,0,0,0.5)',
+                        transparentCorners: false
+                    });
+                    canvas.add(shape);
+                }
+
+                
+
+
+                
+            });
+
+            canvas.on('mouse:move', function(o){
+                if (!isDown) return;
+                var pointer = canvas.getPointer(o.e);
+                
+                if(origX>pointer.x){
+                    shape.set({ left: Math.abs(pointer.x) });
+                }
+                if(origY>pointer.y){
+                    shape.set({ top: Math.abs(pointer.y) });
+                }
+                
+                shape.set({ width: Math.abs(origX - pointer.x) });
+                shape.set({ height: Math.abs(origY - pointer.y) });
+                
+                
+                canvas.renderAll();
+            });
+
+            canvas.on('mouse:up', function(o){
+                isDown = false;
+            });
+
+            function selectObject(sel){
+
+                switch(sel) {
+                    case "square":
+                        objType = 'square';
+                        console.log(objType);
+                        break;
+                    case "circle":
+                        objType = 'circle';
+                        console.log(objType);
+                        break;
+                    case "triangle":
+                        objType = 'triangle';
+                        console.log(objType);
+                        break;
+                    }
+            }
+
+        </script> 
+    </body>
+</html>
