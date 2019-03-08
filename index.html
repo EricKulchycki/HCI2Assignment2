@@ -4,129 +4,160 @@
     <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="fabric.js"></script>
+    <script type="text/javascript" src="colorpicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
     </head>
 
     <body>
-        <button onclick="selectObject('square')" >Square</button>
-        <button onclick="selectObject('circle')">Circle</button>
-        <button onclick="selectObject('triangle')">Triangle</button>
-        <button onclick="selectObject('line')">Line</button>
-        <canvas id="c" width="400" height="600"></canvas>
-        <script type="text/javascript">
-            var canvas = new fabric.Canvas('c', {
-                isDrawingMode: true
-            });
-
-            canvas.freeDrawingBrush.color = 'rgba(0,0,0,0.5)';
-
-            var objType = "square";
-
-            var shape, isDown, origX, origY;
-            var pointArrayx = [];
-            var pointArrayy = [];
-            var maxXval, minXval, maxYval, minYval;
-            var lengthVal;
-
-            canvas.on('mouse:down', function(o){
-                maxXval = 0;
-                minXval = 0;
-                maxYval, minYval = 0;
-                lengthVal = 0;
-                pointArrayx = [];
-                pointArrayy = [];
-                isDown = true;
-                var pointer = canvas.getPointer(o.e);
-                origX = pointer.x;
-                origY = pointer.y;
-            });
-
-            canvas.on('mouse:move', function(o){
-                // if (!isDown) return;
-                var pointer = canvas.getPointer(o.e);
-            
-                pointArrayx.push(pointer.x);
-                pointArrayy.push(pointer.y);
-                
-                
-                canvas.renderAll();
-            });
-
-            canvas.on('mouse:up', function(o){
-                maxXval = Math.max.apply(null, pointArrayx); 
-                minXval = Math.min.apply(null, pointArrayx);
-                maxYval = Math.max.apply(null, pointArrayy);
-                minYval = Math.min.apply(null, pointArrayy);
-                console.log(pointArrayx);
-                console.log("Max X value " + maxXval + "----" + "Min X value " + minXval);
-                isDown = false;
-
-                if(Math.abs(maxYval - minYval) > Math.abs(maxXval - minXval) ) {
-                        lengthVal = Math.abs(maxYval - minYval);
-                    } else {
-                        lengthVal = Math.abs(maxXval - minXval);
-                    }
-
-                if(objType == 'square') {
-                    shape = new fabric.Rect({
-                        left: origX,
-                        top: origY,
-                        width: lengthVal,
-                        height: lengthVal,
-                        angle: 0,
-                        fill: 'rgba(255,0,0,0.5)',
-                        transparentCorners: false
-                    });
-                    canvas.add(shape);
-                } else if (objType == 'circle') {
-                    shape = new fabric.Circle({
-                        radius: (lengthVal / 2),
-                        left: origX,
-                        top: origY,
-                        fill: 'rgba(0,0,255,0.5)',
-                        originX: 'center', originY: 'center'
-                    });
-                    canvas.add(shape);
-                } else if (objType == 'triangle') {
-                    shape = new fabric.Triangle({
-                        top: origY,
-                        left: origX,
-                        width: lengthVal,
-                        height: lengthVal,
-                        fill: 'rgba(0,255,0,0.5)',
-                        originX: 'center', originY: 'center'
-                    });
-                    canvas.add(shape);
-                } else if (objType == 'line') {
-                    shape = new fabric.Line([origX, origY, pointArrayx.pop(), pointArrayy.pop()], {
-                        stroke: 'black'
-                    });
-                    canvas.add(shape);
-                }
-
-            });
-
-            function selectObject(sel){
-
-                switch(sel) {
-                    case "square":
-                        objType = 'square';
-                        console.log(objType);
-                        break;
-                    case "circle":
-                        objType = 'circle';
-                        console.log(objType);
-                        break;
-                    case "triangle":
-                        objType = 'triangle';
-                        console.log(objType);
-                        break;
-                    case "line":
-                        objType = 'line';
-                        console.log(objType);
-                        break;
-                    }
-            }
-
-        </script> 
+		<div id="container">
+			<button onclick="selectObject('square')" >Square</button>
+			<button onclick="selectObject('circle')">Circle</button>
+			<button onclick="selectObject('triangle')">Triangle</button>
+			<button onclick="selectObject('line')">Line</button>
+			<p></p>
+			<div id="picker-wrapper">
+				<div id="picker"></div>
+				<div id="picker-indicator"></div>
+			</div>
+			<div id="slider-wrapper">
+				<div id="slider"></div>
+				<div id="slider-indicator"></div>
+			</div>
+			<script type="text/javascript">
+			ColorPicker.fixIndicators(
+                document.getElementById('slider-indicator'),
+                document.getElementById('picker-indicator'));
+			ColorPicker(
+                document.getElementById('slider'), 
+                document.getElementById('picker'), 
+				function(hex, hsv, rgb, pickerCoordinate, sliderCoordinate) {
+				    ColorPicker.positionIndicators(
+                        document.getElementById('slider-indicator'),
+                        document.getElementById('picker-indicator'),
+                        sliderCoordinate, pickerCoordinate
+                    );
+					shapeColor = hex;
+				});
+			</script>
+			
+			<canvas id="c" width="400" height="600"></canvas>
+			<script type="text/javascript">
+				var canvas = new fabric.Canvas('c', {
+					isDrawingMode: true
+				});
+	
+				canvas.freeDrawingBrush.color = 'rgba(0,0,0,0.5)';
+	
+				var objType = "square";
+	
+				var shape, isDown, origX, origY;
+				var pointArrayx = [];
+				var pointArrayy = [];
+				var maxXval, minXval, maxYval, minYval;
+				var lengthVal;
+				var shapeColor = 'rgba(0,0,0,0.5)';
+	
+				canvas.on('mouse:down', function(o){
+					maxXval = 0;
+					minXval = 0;
+					maxYval, minYval = 0;
+					lengthVal = 0;
+					pointArrayx = [];
+					pointArrayy = [];
+					isDown = true;
+					var pointer = canvas.getPointer(o.e);
+					origX = pointer.x;
+					origY = pointer.y;
+				});
+	
+				canvas.on('mouse:move', function(o){
+					// if (!isDown) return;
+					var pointer = canvas.getPointer(o.e);
+				
+					pointArrayx.push(pointer.x);
+					pointArrayy.push(pointer.y);
+					
+					
+					canvas.renderAll();
+				});
+	
+				canvas.on('mouse:up', function(o){
+					maxXval = Math.max.apply(null, pointArrayx); 
+					minXval = Math.min.apply(null, pointArrayx);
+					maxYval = Math.max.apply(null, pointArrayy);
+					minYval = Math.min.apply(null, pointArrayy);
+					console.log(pointArrayx);
+					console.log("Max X value " + maxXval + "----" + "Min X value " + minXval);
+					isDown = false;
+	
+					if(Math.abs(maxYval - minYval) > Math.abs(maxXval - minXval) ) {
+							lengthVal = Math.abs(maxYval - minYval);
+						} else {
+							lengthVal = Math.abs(maxXval - minXval);
+						}
+	
+					if(objType == 'square') {
+						shape = new fabric.Rect({
+							left: origX,
+							top: origY,
+							width: lengthVal,
+							height: lengthVal,
+							angle: 0,
+							fill: shapeColor,
+							transparentCorners: false
+						});
+						canvas.add(shape);
+					} else if (objType == 'circle') {
+						shape = new fabric.Circle({
+							radius: (lengthVal / 2),
+							left: origX,
+							top: origY,
+							fill: shapeColor,
+							originX: 'center', originY: 'center'
+						});
+						canvas.add(shape);
+					} else if (objType == 'triangle') {
+						shape = new fabric.Triangle({
+							top: origY,
+							left: origX,
+							width: lengthVal,
+							height: lengthVal,
+							fill: shapeColor,
+							originX: 'center', originY: 'center'
+						});
+						canvas.add(shape);
+					} else if (objType == 'line') {
+						shape = new fabric.Line([origX, origY, pointArrayx.pop(), pointArrayy.pop()], {
+							stroke: 'black'
+						});
+						canvas.add(shape);
+					}
+	
+				});
+	
+				function selectObject(sel){
+	
+					switch(sel) {
+						case "square":
+							objType = 'square';
+							console.log(objType);
+							break;
+						case "circle":
+							objType = 'circle';
+							console.log(objType);
+							break;
+						case "triangle":
+							objType = 'triangle';
+							console.log(objType);
+							break;
+						case "line":
+							objType = 'line';
+							console.log(objType);
+							break;
+						}
+				}
+	
+			</script> 
+		</div>
     </body>
 </html>
