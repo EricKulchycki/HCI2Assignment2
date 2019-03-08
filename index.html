@@ -35,72 +35,12 @@
                 var pointer = canvas.getPointer(o.e);
                 origX = pointer.x;
                 origY = pointer.y;
-                var pointer = canvas.getPointer(o.e);
-
-
-                if(objType == 'square') {
-
-                    
-                    
-                    shape = new fabric.Rect({
-                        left: origX,
-                        top: origY,
-                        originX: 'left',
-                        originY: 'top',
-                        width: maxXval,
-                        height: maxXval,
-                        angle: 0,
-                        fill: 'rgba(255,0,0,0.5)',
-                        transparentCorners: false
-                    });
-                    canvas.add(shape);
-                } else if (objType == 'circle') {
-                    console.log("HERE");
-                    shape = new fabric.Circle({
-                        raduis: 200,
-                        // width: pointer.x - origX,
-                        // height: pointer.y - origY,
-                        // originX: 'center',
-                        // originY: 'center',
-                        fill: 'rgba(0,0,255,0.5)'
-                    });
-                    canvas.add(shape);
-                } else if (objType == 'triangle'){
-                    shape = new fabric.Rect({
-                        left: origX,
-                        top: origY,
-                        originX: 'left',
-                        originY: 'top',
-                        width: pointer.x-origX,
-                        height: pointer.y-origY,
-                        angle: 0,
-                        fill: 'rgba(255,0,0,0.5)',
-                        transparentCorners: false
-                    });
-                    canvas.add(shape);
-                }
-
-                
-
-
-                
             });
 
             canvas.on('mouse:move', function(o){
                 // if (!isDown) return;
                 var pointer = canvas.getPointer(o.e);
-                
-                // if(origX>pointer.x){
-                //     shape.set({ left: Math.abs(pointer.x) });
-                // }
-                // if(origY>pointer.y){
-                //     shape.set({ top: Math.abs(pointer.y) });
-                // }
-                
-                // shape.set({ width: Math.abs(origX - pointer.x) });
-                // shape.set({ height: Math.abs(origY - pointer.y) });
-                //console.log(pointer.x);
-
+            
                 pointArrayx.push(pointer.x);
                 pointArrayy.push(pointer.y);
                 
@@ -124,10 +64,6 @@
                     }
 
                 if(objType == 'square') {
- 
-
-                    
-                    
                     shape = new fabric.Rect({
                         left: origX,
                         top: origY,
@@ -139,11 +75,12 @@
                     });
                     canvas.add(shape);
                 } else if (objType == 'circle') {
+                    console.log("HERE BITCH");
                     shape = new fabric.Circle({
-                        raduis: lengthVal / 2,
+                        radius: (lengthVal / 2),
                         left: origX,
                         top: origY,
-                        fill: 'rgba(0,0,255,0.5)'
+                        fill: 'rgba(255,0,0,0.5)'
                     });
                     canvas.add(shape);
                 }
