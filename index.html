@@ -10,11 +10,14 @@
         <button onclick="selectObject('square')" >Square</button>
         <button onclick="selectObject('circle')">Circle</button>
         <button onclick="selectObject('triangle')">Triangle</button>
+        <button onclick="selectObject('line')">Line</button>
         <canvas id="c" width="400" height="600"></canvas>
         <script type="text/javascript">
             var canvas = new fabric.Canvas('c', {
                 isDrawingMode: true
             });
+
+            canvas.freeDrawingBrush.color = 'rgba(0,0,0,0.5)';
 
             var objType = "square";
 
@@ -75,15 +78,31 @@
                     });
                     canvas.add(shape);
                 } else if (objType == 'circle') {
-                    console.log("HERE BITCH");
                     shape = new fabric.Circle({
                         radius: (lengthVal / 2),
                         left: origX,
                         top: origY,
-                        fill: 'rgba(255,0,0,0.5)'
+                        fill: 'rgba(0,0,255,0.5)',
+                        originX: 'center', originY: 'center'
+                    });
+                    canvas.add(shape);
+                } else if (objType == 'triangle') {
+                    shape = new fabric.Triangle({
+                        top: origY,
+                        left: origX,
+                        width: lengthVal,
+                        height: lengthVal,
+                        fill: 'rgba(0,255,0,0.5)',
+                        originX: 'center', originY: 'center'
+                    });
+                    canvas.add(shape);
+                } else if (objType == 'line') {
+                    shape = new fabric.Line([origX, origY, pointArrayx.pop(), pointArrayy.pop()], {
+                        stroke: 'black'
                     });
                     canvas.add(shape);
                 }
+
             });
 
             function selectObject(sel){
@@ -99,6 +118,10 @@
                         break;
                     case "triangle":
                         objType = 'triangle';
+                        console.log(objType);
+                        break;
+                    case "line":
+                        objType = 'line';
                         console.log(objType);
                         break;
                     }
