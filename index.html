@@ -12,13 +12,25 @@
         <button onclick="selectObject('triangle')">Triangle</button>
         <canvas id="c" width="400" height="600"></canvas>
         <script type="text/javascript">
-            var canvas = new fabric.Canvas('c');
+            var canvas = new fabric.Canvas('c', {
+                isDrawingMode: true
+            });
 
             var objType = "square";
 
             var shape, isDown, origX, origY;
+            var pointArrayx = [];
+            var pointArrayy = [];
+            var maxXval, minXval, maxYval, minYval;
+            var lengthVal;
 
             canvas.on('mouse:down', function(o){
+                maxXval = 0;
+                minXval = 0;
+                maxYval, minYval = 0;
+                lengthVal = 0;
+                pointArrayx = [];
+                pointArrayy = [];
                 isDown = true;
                 var pointer = canvas.getPointer(o.e);
                 origX = pointer.x;
@@ -27,14 +39,16 @@
 
 
                 if(objType == 'square') {
+
+                    
                     
                     shape = new fabric.Rect({
                         left: origX,
                         top: origY,
                         originX: 'left',
                         originY: 'top',
-                        width: pointer.x-origX,
-                        height: pointer.y-origY,
+                        width: maxXval,
+                        height: maxXval,
                         angle: 0,
                         fill: 'rgba(255,0,0,0.5)',
                         transparentCorners: false
@@ -73,25 +87,66 @@
             });
 
             canvas.on('mouse:move', function(o){
-                if (!isDown) return;
+                // if (!isDown) return;
                 var pointer = canvas.getPointer(o.e);
                 
-                if(origX>pointer.x){
-                    shape.set({ left: Math.abs(pointer.x) });
-                }
-                if(origY>pointer.y){
-                    shape.set({ top: Math.abs(pointer.y) });
-                }
+                // if(origX>pointer.x){
+                //     shape.set({ left: Math.abs(pointer.x) });
+                // }
+                // if(origY>pointer.y){
+                //     shape.set({ top: Math.abs(pointer.y) });
+                // }
                 
-                shape.set({ width: Math.abs(origX - pointer.x) });
-                shape.set({ height: Math.abs(origY - pointer.y) });
+                // shape.set({ width: Math.abs(origX - pointer.x) });
+                // shape.set({ height: Math.abs(origY - pointer.y) });
+                //console.log(pointer.x);
+
+                pointArrayx.push(pointer.x);
+                pointArrayy.push(pointer.y);
                 
                 
                 canvas.renderAll();
             });
 
             canvas.on('mouse:up', function(o){
+                maxXval = Math.max.apply(null, pointArrayx); 
+                minXval = Math.min.apply(null, pointArrayx);
+                maxYval = Math.max.apply(null, pointArrayy);
+                minYval = Math.min.apply(null, pointArrayy);
+                console.log(pointArrayx);
+                console.log("Max X value " + maxXval + "----" + "Min X value " + minXval);
                 isDown = false;
+
+                if(Math.abs(maxYval - minYval) > Math.abs(maxXval - minXval) ) {
+                        lengthVal = Math.abs(maxYval - minYval);
+                    } else {
+                        lengthVal = Math.abs(maxXval - minXval);
+                    }
+
+                if(objType == 'square') {
+ 
+
+                    
+                    
+                    shape = new fabric.Rect({
+                        left: origX,
+                        top: origY,
+                        width: lengthVal,
+                        height: lengthVal,
+                        angle: 0,
+                        fill: 'rgba(255,0,0,0.5)',
+                        transparentCorners: false
+                    });
+                    canvas.add(shape);
+                } else if (objType == 'circle') {
+                    shape = new fabric.Circle({
+                        raduis: lengthVal / 2,
+                        left: origX,
+                        top: origY,
+                        fill: 'rgba(0,0,255,0.5)'
+                    });
+                    canvas.add(shape);
+                }
             });
 
             function selectObject(sel){
