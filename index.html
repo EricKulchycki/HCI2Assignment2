@@ -10,10 +10,10 @@
 
     <body>
 		<div id="container">
-			<button onclick="selectObject('square')" >Square</button>
-			<button onclick="selectObject('circle')">Circle</button>
-			<button onclick="selectObject('triangle')">Triangle</button>
-			<button onclick="selectObject('line')">Line</button>
+			<button class="button big-btn" onclick="selectObject('square')" >Square</button>
+			<button class="button big-btn" onclick="selectObject('circle')">Circle</button>
+			<button class="button big-btn" onclick="selectObject('triangle')">Triangle</button>
+			<button class="button big-btn" onclick="selectObject('line')">Line</button>
 			<p></p>
 			<div id="picker-wrapper">
 				<div id="picker"></div>
@@ -37,10 +37,11 @@
                         sliderCoordinate, pickerCoordinate
                     );
 					shapeColor = hex;
+					canvas.freeDrawingBrush.color = hex;
 				});
 			</script>
 			
-			<canvas id="c" width="400" height="600"></canvas>
+			<canvas id="c" width="1000" height="800"></canvas>
 			<script type="text/javascript">
 				var canvas = new fabric.Canvas('c', {
 					isDrawingMode: true
@@ -128,7 +129,7 @@
 						canvas.add(shape);
 					} else if (objType == 'line') {
 						shape = new fabric.Line([origX, origY, pointArrayx.pop(), pointArrayy.pop()], {
-							stroke: 'black'
+							stroke: shapeColor
 						});
 						canvas.add(shape);
 					}
