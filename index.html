@@ -57,6 +57,7 @@
 				var maxXval, minXval, maxYval, minYval;
 				var lengthVal;
 				var shapeColor = 'rgba(0,0,0,0.5)';
+				var counter = 0;
 	
 				canvas.on('mouse:down', function(o){
 					maxXval = 0;
@@ -90,6 +91,9 @@
 					console.log(pointArrayx);
 					console.log("Max X value " + maxXval + "----" + "Min X value " + minXval);
 					isDown = false;
+					
+					//removes the line the user draws
+					canvas.remove(canvas.getObjects()[counter++]);
 	
 					if(Math.abs(maxYval - minYval) > Math.abs(maxXval - minXval) ) {
 							lengthVal = Math.abs(maxYval - minYval);
