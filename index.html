@@ -58,8 +58,15 @@
 				var lengthVal;
 				var shapeColor = 'rgba(0,0,0,0.5)';
 				var counter = 0;
+				var deleted = false;
 	
 				canvas.on('mouse:down', function(o){
+					if(o.target) {
+						console.log('an object was clicked!',o.target.type);
+						canvas.remove(o.target);
+						deleted = true;
+						return;
+					}
 					maxXval = 0;
 					minXval = 0;
 					maxYval, minYval = 0;
@@ -84,6 +91,10 @@
 				});
 	
 				canvas.on('mouse:up', function(o){
+					if(deleted) {
+						deleted = false;
+						return;
+					}
 					maxXval = Math.max.apply(null, pointArrayx); 
 					minXval = Math.min.apply(null, pointArrayx);
 					maxYval = Math.max.apply(null, pointArrayy);
